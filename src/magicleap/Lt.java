@@ -24,7 +24,7 @@ public class Lt {
 		capabilities.setCapability("version", version);
 		capabilities.setCapability("platform", platform); // If this cap isn't specified, it will just get the any
 															// available one
-		capabilities.setCapability("build", "AD23");
+		capabilities.setCapability("build", "NEW");
 		capabilities.setCapability("name", "LambdaTestJavaSample");
 		capabilities.setCapability("network", true); // To enable network logs
 		capabilities.setCapability("visual", true); // To enable step by step screenshot
@@ -34,7 +34,7 @@ public class Lt {
 
 		try {
 			driver = new RemoteWebDriver(new URL(
-					"https://adityad:6dDS47MC6UCRAwzElohcPidd0fZtFYEX1F7x7heZEztCXXDk3v@hub.lambdatest.com/wd/hub"),
+					"https://adityad:wS3T8Z3ZuuoMKFHQ1CWBy9TNKzbbqFq1arS6kS1SjqPGw6derC@hub.lambdatest.com/wd/hub"),
 					capabilities);
 		} catch (MalformedURLException e) {
 			System.out.println("Invalid grid URL");

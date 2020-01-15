@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
@@ -21,21 +22,31 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+
 public class ParameterDataProviderWithClassLevel {
 	WebDriver driver;
 	String d;
+	public ExtentReports extent = new ExtentReports();
+	public ExtentTest logger;
+	public ExtentHtmlReporter reporter;
 
 	@BeforeTest
 	public void URLlanch() throws Throwable {
-		//ChromeOptions options = new ChromeOptions();  
-		//options.addArguments("--headless", "--disable-gpu", "--window-size=1920,1200","--ignore-certificate-errors");  
+		// ChromeOptions options = new ChromeOptions();
+		// options.addArguments("--headless", "--disable-gpu",
+		// "--window-size=1920,1200","--ignore-certificate-errors");
 
 		System.setProperty("webdriver.chrome.driver", "./exefiles/chromedriver.exe");
-		//driver = new ChromeDriver(options);
+		// driver = new ChromeDriver(options);
 		driver = new ChromeDriver();
 		driver.manage().timeouts().implicitlyWait(40, TimeUnit.SECONDS);
 		driver.manage().window().maximize();
@@ -62,7 +73,15 @@ public class ParameterDataProviderWithClassLevel {
 	public void testMethod(String browser, String brosName, String Version, String verName, String OS, String OSName,
 			String Resolution, String ResoName) throws InterruptedException {
 
+		reporter = new ExtentHtmlReporter("C:/Users/Admin/Desktop/LT_SS//test_report.html");
+
+		extent.attachReporter(reporter);
+		logger = extent.createTest("LoginTest");
+		logger.log(Status.INFO, "Falcon Test");
+		logger.log(Status.PASS, "Test Pass");
+
 		JavascriptExecutor je = (JavascriptExecutor) driver;
+		
 		String borwsre = "/html/body/app-root/app-console/app-header/section/app-test-detail/div[1]/div[2]/div/div[1]/app-desktop/div[1]/div/div[1]/div/ul/li["
 				+ browser + "]";
 		WebElement element1 = driver.findElement(By.xpath(borwsre));
@@ -83,7 +102,7 @@ public class ParameterDataProviderWithClassLevel {
 				"Browser - " + brosName + " Version - " + verName + " OS - " + OSName + " Resolution - " + ResoName);
 
 		String ss_name = brosName + "-" + verName + "-" + OSName + "-" + ResoName;
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 
 		WebElement ClickBrowser = driver.findElement(By.xpath(borwsre));
 
@@ -102,7 +121,7 @@ public class ParameterDataProviderWithClassLevel {
 
 		ClickReso.click();
 
-		Thread.sleep(2000);
+//		Thread.sleep(2000);
 		WebElement TestUrl = driver.findElement(By.id("input-text"));
 		TestUrl.clear();
 		TestUrl.sendKeys("https://www.ferro-ok.cz/");
@@ -121,7 +140,7 @@ public class ParameterDataProviderWithClassLevel {
 		System.out.println(TEST_ID[1]);
 
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, 40);
+			WebDriverWait wait = new WebDriverWait(driver, 20);
 			wait.until(ExpectedConditions
 					.presenceOfElementLocated(By.cssSelector(".display-container div div div canvas")));
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.id("info-tab")));
@@ -162,5 +181,10 @@ public class ParameterDataProviderWithClassLevel {
 	@AfterTest
 	public void tearDown() {
 		driver.close();
+	}
+
+	@AfterSuite
+	public void tearSuite() {
+		extent.flush();
 	}
 }
